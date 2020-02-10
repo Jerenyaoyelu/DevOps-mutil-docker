@@ -1,0 +1,22 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t lyyjeren/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run -e CI=true lyyjeren/react-test npm test
+
+after_success:
+    - docker build -t lyyjeren/multi-client ./client
+    - docker build -t  lyyjeren/multi-nginx ./nginx
+    - docker build -t lyyjeren/multi-server ./server
+    - docker build -t lyyjeren/multi-worker ./worker
+    #login to docker CLI
+    - echo "$DOCKER_PASSWARD" | docker login -u "$DOCKER_ID" --password-stdin
+    #take there images nad push to docker hub
+    - docker push lyyjeren/multi-client
+    - docker push lyyjeren/multi-nginx
+    - docker push lyyjeren/multi-server
+    - docker push lyyjeren/multi-worker
