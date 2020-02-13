@@ -10,7 +10,7 @@ script:
 
 after_success:
     - docker build -t lyyjeren/multi-client ./client
-    - docker build -t  lyyjeren/multi-nginx ./nginx
+    - docker build -t lyyjeren/multi-nginx ./nginx
     - docker build -t lyyjeren/multi-server ./server
     - docker build -t lyyjeren/multi-worker ./worker
     #login to docker CLI
